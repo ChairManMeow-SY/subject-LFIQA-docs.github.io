@@ -1,12 +1,12 @@
-# 进阶主题
+# Advanced Topics
 
-## 双文件夹模式 {#two-folder-mode}
+## Two-Folder Mode
 
-双文件夹模式是最快的实验初始化方式，适合已有预处理数据的场景。
+Two-folder mode is the fastest way to initialize an experiment — ideal when you already have preprocessed data.
 
-### 启用方式
+### Enabling
 
-在 `Exp_Info` 中设置：
+Set in `Exp_Info`:
 
 ```json
 {
@@ -20,80 +20,79 @@
 }
 ```
 
-### 文件夹结构要求
+### Required Folder Structure
 
-每个文件夹应包含多个 LFI 子目录，每个子目录的结构如下：
+Each root folder should contain LFI subdirectories structured as follows:
 
 ```
 training_root/
-├── Scene_A/                   # LFI 名称自动取文件夹名
-│   ├── 00_00.png              # 原始图像 (SRC)，视角 (0,0)
+├── Scene_A/                   # Folder name → LFI Name
+│   ├── 00_00.png              # SRC (reference) view (0,0)
 │   ├── 00_01.png
 │   ├── ...
 │   ├── dist/
 │   │   ├── HEVC/
-│   │   │   ├── 1/             # 失真级别 1
+│   │   │   ├── 1/             # Distortion level 1
 │   │   │   │   ├── 00_00.png
 │   │   │   │   └── ...
-│   │   │   └── 2/             # 失真级别 2
+│   │   │   └── 2/             # Distortion level 2
 │   │   └── JPEG/
 │   │       └── 1/
 │   │           └── ...
-│   └── lambda.txt             # (可选) 重对焦校准文件
-│   └── depth.png              # (可选) 深度图
+│   ├── lambda.txt             # (optional) Calibration file
+│   └── depth.png              # (optional) Depth map
 ├── Scene_B/
 │   └── ...
 ```
 
-!!! note "文件夹名的含义"
-    在双文件夹模式下：
-    - 顶层文件夹名 = LFI 名称（`Name`）
-    - `dist/` 下的子文件夹名 = 失真类型（`Distortion_Type`）
-    - 失真类型下的子文件夹名 = 失真级别（`Distortion_Level`）
-    - 根目录的图像文件 = SRC（原始无失真图像）
+!!! note "Naming conventions in two-folder mode"
+    - Top-level folder name = LFI `Name`
+    - `dist/` subfolder name = `Distortion_Type`
+    - Distortion-type subfolder name = `Distortion_Level`
+    - Root-level image files = SRC (undistorted reference)
 
-### 与完整 JSON 模式的对比
+### Comparison with Full JSON Mode
 
-| | 双文件夹模式 | 完整 JSON 模式 |
-|------|-------------|---------------|
-| 配置复杂度 | 低 | 高 |
-| 灵活性 | 文件夹结构固定 | 完全自定义 |
-| 元数据 | 从文件夹名推断 | 手动指定 |
-| 适用场景 | 已有数据、快速实验 | 精确控制、复杂实验 |
+| | Two-Folder Mode | Full JSON Mode |
+|---|-----------------|----------------|
+| Configuration complexity | Low | High |
+| Flexibility | Fixed folder structure | Fully customizable |
+| Metadata | Inferred from folder names | Manually specified |
+| Best for | Existing data, quick pilots | Precise control, formal experiments |
 
-建议：先用双文件夹模式快速验证，正式实验用完整 JSON 模式确保配置精确。
+Recommendation: use two-folder mode for quick validation; use full JSON mode for formal experiments to ensure precise configuration.
 
 ---
 
-## 编译为独立可执行文件 {#compile-exe}
+## Compiling to a Standalone Executable
 
-使用 PyInstaller 将软件打包成单个 exe 文件（Windows），方便分发给被试使用。
+Use PyInstaller to package the software into a single exe (Windows) for distribution to subjects.
 
 ```bash
 pyinstaller --onefile -w \
     -p ./UI \
     -p ./Widgets \
-    --add-data "<ffmpeg路径>:./" \
+    --add-data "<path/to/ffmpeg>:./" \
     --icon=icon.ico \
     LFIQoE.py
 ```
 
-参数说明：
-- `--onefile` — 打包为单个文件
-- `-w` — 不显示控制台窗口
-- `-p` — 添加 Python 模块搜索路径
-- `--add-data` — 将 ffmpeg 可执行文件打包到 exe 中
-- `--icon` — 设置 exe 图标
+Options explained:
+- `--onefile` — bundle into a single file
+- `-w` — suppress console window
+- `-p` — add Python module search paths
+- `--add-data` — bundle ffmpeg executable into the exe
+- `--icon` — set the exe icon
 
-编译后的 exe 在 `dist/` 目录下。
+The compiled exe is placed in `dist/`.
 
 ---
 
-## 软件设置
+## Software Settings
 
 ### SoftwareConfig.json
 
-根目录的 `SoftwareConfig.json` 保存软件级设置：
+The root-level `SoftwareConfig.json` stores global settings:
 
 ```json
 {
@@ -103,33 +102,33 @@ pyinstaller --onefile -w \
 }
 ```
 
-| 字段 | 说明 |
-|------|------|
-| `Logs_Path` | 日志文件保存路径 |
-| `Log_Level` | 日志级别（`DEBUG` / `INFO` / `WARNING` / `ERROR`） |
-| `Thread_Num` | ffmpeg 并行处理线程数 |
+| Field | Description |
+|-------|-------------|
+| `Logs_Path` | Log file directory |
+| `Log_Level` | Logging level (`DEBUG` / `INFO` / `WARNING` / `ERROR`) |
+| `Thread_Num` | Number of parallel ffmpeg worker threads |
 
-可以通过软件菜单 **Settings → Software Setting** 修改这些值。
+Modify these via **Settings → Software Setting** in the menu.
 
-### 字体设置
+### Font Settings
 
-点击 **Settings → Font Setting** 可调整评分界面中的字体大小。有两个参数：
+Click **Settings → Font Setting** to adjust font sizes in the scoring interface:
 
-- **Table Font Size** — 评分表字体
-- **Hint Font Size** — 提示文字字体
-
----
-
-## 多屏环境
-
-如果电脑连接了多个显示器，软件支持在指定屏幕上全屏显示实验界面。
-
-在项目设置中指定 `Screen_Index`（0 为主屏幕，1 为副屏）。评分界面将在对应屏幕上全屏显示，主窗口留在另一个屏幕上供实验操作者监控。
+- **Table Font Size** — scoring table text
+- **Hint Font Size** — hint/instruction text
 
 ---
 
-## 日志系统
+## Multi-Screen Setup
 
-软件运行时所有 `print()` 输出和日志信息会被重定向到 `Logs/` 目录下按日期命名的日志文件（如 `Logs/2026-06-23.log`）。
+If your system has multiple displays, the software can run the experiment fullscreen on a specific screen while keeping the control window on another.
 
-如遇问题，请查看日志文件获取详细错误信息。
+Set `Screen_Index` in the project settings (0 = primary, 1 = secondary). The scoring interface will go fullscreen on the designated display, leaving the main window on the other screen for the experimenter to monitor.
+
+---
+
+## Logging
+
+During operation, all `print()` output and log messages are redirected to daily log files in the `Logs/` directory (e.g., `Logs/2026-06-23.log`).
+
+When troubleshooting, check these log files for detailed error information.

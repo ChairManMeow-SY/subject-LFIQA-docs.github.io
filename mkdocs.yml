@@ -1,5 +1,5 @@
-site_name: subject-LFIQA 用户手册
-site_description: 主观光场图像质量评估软件使用说明 v3.0
+site_name: subject-LFIQA User Manual
+site_description: User manual for the subjective light field image quality assessment software v3.0
 site_author: IMCL
 repo_url: https://github.com/USTC-IMCL/subject-LFIQA-software
 repo_name: USTC-IMCL/subject-LFIQA-software
@@ -7,7 +7,7 @@ edit_uri: ""
 
 theme:
   name: material
-  language: zh
+  language: en
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -15,14 +15,14 @@ theme:
       accent: indigo
       toggle:
         icon: material/brightness-7
-        name: 切换深色模式
+        name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: indigo
       accent: indigo
       toggle:
         icon: material/brightness-4
-        name: 切换浅色模式
+        name: Switch to light mode
   features:
     - navigation.sections
     - navigation.expand
@@ -49,13 +49,13 @@ markdown_extensions:
 
 plugins:
   - search:
-      lang: zh
+      lang: en
 
 nav:
-  - 首页: index.md
-  - 安装: installation.md
-  - 快速上手: quick-start.md
-  - 实验 JSON 配置: experiment-json.md
-  - 软件操作说明: software-operation.md
-  - 进阶主题: advanced.md
-  - 常见问题: faq.md
+  - Home: index.md
+  - Installation: installation.md
+  - Quick Start: quick-start.md
+  - Experiment JSON: experiment-json.md
+  - Operations: software-operation.md
+  - Advanced: advanced.md
+  - FAQ: faq.md

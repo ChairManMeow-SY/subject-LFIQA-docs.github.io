@@ -1,140 +1,140 @@
-# 常见问题
+# Frequently Asked Questions
 
-## 启动与安装
+## Startup & Installation
 
-### 启动时报 `ImportError: No module named 'Widgets'`
+### `ImportError: No module named 'Widgets'` on launch
 
-**原因**：未从仓库根目录启动。
+**Cause**: Not launched from the repository root directory.
 
-**解决**：
+**Solution**:
 ```bash
 cd /path/to/subject-LFIQA-software
 python LFIQoE.py
 ```
-不要在子目录中运行，也不要用绝对路径 `python /path/to/LFIQoE.py` 从其他目录启动。
+Do not run from a subdirectory, and do not use an absolute path like `python /path/to/LFIQoE.py` from a different working directory.
 
-### ffmpeg 找不到 / 被动模式视频无法生成
+### ffmpeg not found / passive video generation fails
 
-**原因**：ffmpeg 未安装或不在 PATH 中。
+**Cause**: ffmpeg is not installed or not on PATH.
 
-**解决**：
-1. 确认 ffmpeg 已安装：终端执行 `ffmpeg -version`
-2. Windows 用户需将 ffmpeg 的 `bin/` 目录添加到系统 PATH
-3. 或者将 `ffmpeg.exe` 直接复制到软件根目录
+**Solution**:
+1. Verify ffmpeg is installed: run `ffmpeg -version` in a terminal
+2. On Windows, add ffmpeg's `bin/` folder to the system PATH
+3. Or copy `ffmpeg.exe` directly into the software root directory
 
-### 被动模式报 `SceneResolution.json not found`
+### Passive mode error: `SceneResolution.json not found`
 
-**原因**：仓库根目录缺少 `SceneResolution.json` 文件。
+**Cause**: The `SceneResolution.json` file is missing from the repository root.
 
-**解决**：在根目录创建该文件，内容格式见[软件操作说明](software-operation.md#sceneresolutionjson)。文件中需包含每个被动模式 LFI 的分辨率信息。
-
----
-
-## 预处理
-
-### 重对焦预处理报错
-
-**原因**：缺少 `lambda.txt` 或 `depth.png`。
-
-**解决**：
-- 确认每个启用了重对焦的 LFI 文件夹中包含这两个文件
-- 如果不需要重对焦，在 `Exp_Info` 中设置 `"Refocusing": "None"`
-- 目前仅支持 Lytro 相机格式的密集光场，其他设备需要自定义预处理
-
-### 预处理生成的文件打不开 / 显示异常
-
-**原因**：可能是视角图像尺寸不一致，或 ffmpeg 编码参数不兼容。
-
-**解决**：
-1. 确认所有视角图像的宽高一致（与 JSON 配置中的 `Width` / `Height` 匹配）
-2. 确认 angular 维度数与 `Angular_Width` / `Angular_Height` 一致
-3. 查看 `Logs/` 目录下的日志文件获取具体错误
+**Solution**: Create it in the root directory. Format details: [Operations](software-operation.md#sceneresolutionjson). It must contain resolution information for every LFI used in passive mode.
 
 ---
 
-## 实验运行
+## Preprocessing
 
-### 评分界面显示不全 / 错位
+### Refocusing preprocessing fails
 
-**原因**：屏幕分辨率不匹配。
+**Cause**: Missing `lambda.txt` or `depth.png`.
 
-**解决**：
-1. 调整 `Table_Font_Size` 和 `Hint_Font_Size` 适应屏幕
-2. 在 `SoftwareConfig.json` 中检查屏幕设置
-3. 多屏环境下确认 `Screen_Index` 指向正确的显示器
+**Solution**:
+- Ensure each LFI folder with refocusing enabled contains both files
+- If you don't need refocusing, set `"Refocusing": "None"` in `Exp_Info`
+- Currently only Lytro-camera dense light fields are supported; other devices require custom preprocessing
 
-### 被动视频播放卡顿
+### Preprocessing output images are garbled or display incorrectly
 
-**原因**：MPV 解码性能不足或视频编码参数过高。
+**Cause**: Inconsistent view image dimensions, or ffmpeg encoding parameter mismatch.
 
-**解决**：
-1. 降低视频分辨率
-2. 减少 `Loop_Times`
-3. 在性能更好的电脑上运行
-
-### 主动模式鼠标无法切换视角
-
-**原因**：需要先右键唤醒。
-
-**解决**：在图像上**右键点击**（任意位置），然后移动鼠标切换视角。这是设计特性，确保所有被试从同一视角开始。
-
-### 被试不小心打错分怎么办
-
-**原因**：评分后无法返回修改。
-
-**解决**：这是设计特性（防止被试反复修改）。建议：
-- 在 Training 阶段让被试充分练习
-- 如果错误严重，可以在后处理时删除该条记录，重新运行 Post Processing
+**Solution**:
+1. Verify all view images have consistent width/height (matching JSON `Width` / `Height`)
+2. Verify the angular dimension counts match `Angular_Width` / `Angular_Height`
+3. Check log files in `Logs/` for specific error messages
 
 ---
 
-## 后处理
+## Running Experiments
 
-### 后处理结果显示空白或全为 0
+### Scoring interface is clipped or misaligned
 
-**原因**：没有正式测试数据（Test），或数据格式异常。
+**Cause**: Screen resolution mismatch.
 
-**解决**：
-1. 确认至少运行过 Run → Start Test
-2. 确认 `SubjectResults/` 目录下有被试数据文件
-3. 检查 `Save_Format` 与实际保存格式是否一致
+**Solution**:
+1. Adjust `Table_Font_Size` and `Hint_Font_Size` for your display
+2. Check screen settings in `SoftwareConfig.json`
+3. In multi-screen setups, verify `Screen_Index` points to the correct display
 
-### PLCC 值异常低
+### Passive video playback is choppy
 
-**原因**：被试评分一致性差。
+**Cause**: MPV decoding performance or high video encoding parameters.
 
-**解决**：
-- 检查 Training 阶段是否充分
-- 确认被试理解了评分标准
-- PLCC 反映单个被试与群体的相关性，低 PLCC 可能表示该被试的评分需要排除
+**Solution**:
+1. Reduce video resolution
+2. Reduce `Loop_Times`
+3. Run on a machine with better performance
+
+### Active mode: mouse doesn't change the viewpoint
+
+**Cause**: View switching needs to be "woken up" first.
+
+**Solution**: **Right-click** anywhere on the image, then move the mouse. This is an intentional design — it ensures all subjects start from the same viewpoint.
+
+### Subject entered a wrong score — can we go back?
+
+**Cause**: No undo/back navigation by design.
+
+**Solution**: This is intentional (prevents subjects from second-guessing). Suggestions:
+- Let subjects practice sufficiently during Training
+- If the error is severe, delete that record and re-run Post Processing
 
 ---
 
-## 其他
+## Post-Processing
 
-### 软件窗口闪退
+### Post-processing results are blank or all zeros
 
-**解决**：从终端运行 `python LFIQoE.py`，观察错误输出。常见原因：
-- 缺少 Python 依赖包
-- Python 版本过低（需要 3.9+）
-- 显卡驱动不兼容（MPV 相关）
+**Cause**: No formal test data, or malformed data format.
 
-### 如何查看日志
+**Solution**:
+1. Confirm at least one **Run → Start Test** session has been completed
+2. Verify `SubjectResults/` contains subject data files
+3. Check that `Save_Format` matches the actual saved format
 
-日志保存在 `Logs/` 目录，文件名格式为 `YYYY-MM-DD.log`。关键调试信息会记录在此。
+### PLCC values are unusually low
 
-### 我可以修改源码吗
+**Cause**: Poor inter-subject rating consistency.
 
-本项目采用 BSD 许可证，欢迎修改和分发。如需重新编译，参考[编译 exe](advanced.md#compile-exe)。
+**Solution**:
+- Check whether the Training phase was sufficient
+- Confirm subjects understood the rating scale
+- PLCC measures per-subject correlation with the group — low PLCC may indicate that subject's ratings should be excluded
 
-### 支持的 LFI 输入格式
+---
 
-- 视角图像：任意常见格式（PNG、JPG、BMP 等）
-- 命名约定：视角文件按 XY 坐标命名
-- 光场类型：密集光场（Dense）完整支持，稀疏光场（Sparse）部分支持
+## Other
 
-### 问题反馈
+### Software crashes on launch
 
-- 提交 [GitHub Issue](https://github.com/USTC-IMCL/subject-LFIQA-software/issues)
-- 邮件联系：zsy7788@mail.ustc.edu.cn
-- 附上日志文件可加速问题定位
+**Solution**: Run `python LFIQoE.py` from a terminal and observe the error output. Common causes:
+- Missing Python dependencies
+- Python version too old (3.9+ required)
+- GPU driver incompatibility (MPV-related)
+
+### How to view logs
+
+Logs are saved in `Logs/` with filenames formatted as `YYYY-MM-DD.log`. Critical debugging information is recorded there.
+
+### Can I modify the source code?
+
+Yes — this project is under the BSD License. Modifications and redistribution are welcome. To recompile, see [Compiling to exe](advanced.md#compiling-to-a-standalone-executable).
+
+### Supported LFI input formats
+
+- View images: any common format (PNG, JPG, BMP, etc.)
+- Naming convention: view files named by XY coordinates
+- Light field type: Dense fully supported; Sparse partially supported
+
+### Reporting Issues
+
+- Open a [GitHub Issue](https://github.com/USTC-IMCL/subject-LFIQA-software/issues)
+- Email: zsy7788@mail.ustc.edu.cn
+- Attach log files to speed up troubleshooting

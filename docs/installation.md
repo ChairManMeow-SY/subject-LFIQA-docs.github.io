@@ -1,29 +1,29 @@
-# 安装
+# Installation
 
-## 环境要求
+## Requirements
 
-| 依赖 | 版本 | 必需 |
-|------|------|------|
+| Dependency | Version | Required |
+|------------|---------|----------|
 | Python | 3.9+ | :material-check: |
-| ffmpeg | 任意较新版本 | :material-check:（被动模式） |
-| MPV | 随 python-mpv 安装 | :material-check:（被动模式） |
-| 操作系统 | Windows / Linux / macOS | :material-check: |
+| ffmpeg | Any recent version | :material-check: (passive mode) |
+| MPV | Bundled with python-mpv | :material-check: (passive mode) |
+| OS | Windows / Linux / macOS | :material-check: |
 
-## 安装步骤
+## Setup Steps
 
-### 1. 安装 Python 依赖
+### 1. Install Python Dependencies
 
 ```bash
 pip install PySide6 xlsxwriter openpyxl numpy opencv-python python-mpv
 ```
 
-### 2. 安装 ffmpeg
+### 2. Install ffmpeg
 
 === "Windows"
-    - 从 [gyan.dev](https://www.gyan.dev/ffmpeg/builds/) 下载（推荐 **release essentials** 版本）
-    - 解压后将 `bin/` 目录添加到系统 `PATH` 环境变量
-    - 或者将 `ffmpeg.exe` 直接放到软件根目录
-    - 验证：在终端执行 `ffmpeg -version`
+    - Download from [gyan.dev](https://www.gyan.dev/ffmpeg/builds/) (recommended: **release essentials** build)
+    - Extract and add the `bin/` folder to your system `PATH`
+    - Or copy `ffmpeg.exe` directly into the software root directory
+    - Verify: run `ffmpeg -version` in a terminal
 
 === "Linux (Ubuntu/Debian)"
     ```bash
@@ -37,30 +37,30 @@ pip install PySide6 xlsxwriter openpyxl numpy opencv-python python-mpv
     ffmpeg -version
     ```
 
-!!! warning "ffmpeg 是必需的"
-    如果你使用**被动模式**（被动视差切换或被动重对焦），必须安装 ffmpeg。主动模式的实验可以不安装，但建议都装。
+!!! warning "ffmpeg is essential for passive mode"
+    If you plan to use **passive mode** (passive view changing or passive refocusing), ffmpeg is required. Active-only experiments can run without it, but installing it is recommended anyway.
 
-### 3. 获取软件
+### 3. Get the Software
 
-=== "从源码运行"
+=== "Run from source"
     ```bash
     git clone https://github.com/USTC-IMCL/subject-LFIQA-software.git
     cd subject-LFIQA-software
     python LFIQoE.py
     ```
 
-=== "使用编译好的二进制文件"
-    从 [Releases](https://github.com/USTC-IMCL/subject-LFIQA-software/releases) 下载对应平台的二进制文件，
-    双击运行即可。二进制文件已内置 ffmpeg。
+=== "Use pre-built binary"
+    Download the binary for your platform from [Releases](https://github.com/USTC-IMCL/subject-LFIQA-software/releases).
+    Double-click to run. The binary bundles ffmpeg internally.
 
-!!! important "必须从仓库根目录运行"
-    如果从源码运行，请确保在仓库根目录执行 `python LFIQoE.py`。软件内部通过相对路径加载 `Widgets/`、`UI/`、`Utils/` 等模块，从其他目录启动会导致 `ImportError`。
+!!! important "Must run from repository root"
+    When running from source, always execute `python LFIQoE.py` from the repository root directory. The software uses relative paths to locate `Widgets/`, `UI/`, and `Utils/` modules. Launching from a different working directory will cause `ImportError`.
 
-## 验证安装
+## Verify Installation
 
-启动软件后，你应该看到：
+Upon launching, you should see:
 
-1. 主窗口（带有菜单栏：Project、Run、Settings、About）
-2. 中央空白区域（用于项目展示）
+1. A main window with menu bar (Project, Run, Settings, About)
+2. An empty central area (for project display)
 
-如果窗口正常显示，说明安装成功。如果闪退，请在终端运行并查看错误信息。
+If the window appears normally, installation is successful. If it crashes immediately, run from a terminal and check the error output.
