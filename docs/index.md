@@ -53,6 +53,8 @@ You are designing or running subjective image quality assessment experiments. Yo
 
 ## License & Citation
 
-BSD License. For questions, contact zsy7788@mail.ustc.edu.cn or open a [GitHub Issue](https://github.com/USTC-IMCL/subject-LFIQA-software/issues).
+MIT License. Contact szhao@idt.eitech.edu.cn for code questions or Saeed.Mahmoudpour@vub.be for JPEG Pleno LF quality assessment activities.
+
+You may also open a [GitHub Issue](https://github.com/USTC-IMCL/subject-LFIQA-software/issues).
 
 > **Reference**: JPEG PLENO proposal on subjective LFIQA experimental design [1]
